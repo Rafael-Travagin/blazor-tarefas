@@ -1,0 +1,53 @@
+﻿@page "/"
+@using BlazorTodo.Model
+
+<div class="container">
+  <main>
+    <div class="py-5 text-center">
+      <img class="d-block mx-auto mb-4" src="favicon.png" alt="" width="72" height="57">
+      <h2>Tarefas</h2>
+      <p class="lead">Adicione tarefas.<br>Indique as que já foram feitas.<br>Não esqueça mais seus compromissos e tenha um histórico do que foi feito.</p>      
+    </div>
+
+    <div class="row g-5">
+        <div class="col-md-5 col-lg-4 order-md-last">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-primary">Suas Tarefas</span>
+            <span class="badge bg-primary rounded-pill">@tarefas.Count(x => !x.IsDone)</span>
+            </h4>
+            
+            <div class="input-group">            
+                <input type="text" class="form-control" placeholder="Nova tarefa" @bind="novaTarefa"/>
+                <button class="btn btn-secondary" @onclick="AddTarefa">Adicionar</button>
+            </div>
+            <br>
+            <ul class="list-group mb-3">
+                @foreach(var tarefa in tarefas)
+                {   
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <input class="form-control" @bind="tarefa.Title">                                             
+                        </div>                    
+                        <small class="text-muted"><input class="form-check-input"  type="checkbox" @bind="tarefa.IsDone"></small>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+  </main>
+</div>
+
+
+@code {
+    private List<TarefaItem> tarefas = new();
+    private string? novaTarefa;
+
+    private void AddTarefa()
+    {
+        if (!string.IsNullOrWhiteSpace(novaTarefa))
+        {
+            tarefas.Add(new(){ Title = novaTarefa });
+            novaTarefa = String.Empty;
+        }
+    }
+}
